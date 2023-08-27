@@ -25,6 +25,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform wallCheck;
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private DialogueUI dialogueUI;
+
+    public DialogueUI DialogueUI => dialogueUI;
+    public iInteractable Interactable { get; set; }
 
     private enum MovementState { idle, running, jumping, falling }
 
@@ -46,6 +50,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+
+        if (dialogueUI.isOpen) return;
+
         dirX = Input.GetAxisRaw("Horizontal");
 
         isGrounded = IsGrounded();
@@ -101,6 +108,12 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Interactable?.Interact(this);
         }
 
         wallSlide();

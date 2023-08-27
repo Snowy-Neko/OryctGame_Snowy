@@ -10,6 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 398ea6f16110aa74dab059b3bdb55a84, type: 3}
-  m_Name: Testing Dialogue
+  m_Name: No
   m_EditorClassIdentifier: 
-  dialogue: []
+  dialogue:
+  - This is the no test
+  response: []
