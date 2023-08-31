@@ -50,81 +50,73 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-
-        if (dialogueUI.isOpen) return;
-
-        dirX = Input.GetAxisRaw("Horizontal");
-
-        isGrounded = IsGrounded();
-        isWallSlide = isWalled();
-        print(isWallSlide);
-        print(remainingJumps);
-
-
-        if (isGrounded)
+        if (!GameManager.instance.GameOver)
         {
-            remainingJumps = 1;
-        }
+            if (dialogueUI.isOpen) return;
 
-        if (Input.GetButtonDown("Jump"))
-        {
-            if (isGrounded || remainingJumps > 0)
+            dirX = Input.GetAxisRaw("Horizontal");
+
+            isGrounded = IsGrounded();
+            isWallSlide = isWalled();
+            print(isWallSlide);
+            print(remainingJumps);
+
+            if (isGrounded)
             {
-                if (!isGrounded)
-                {
-                    remainingJumps--;
-                }
-  
-                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-                jumpSoundEffect.Play();
-
-            }
-            
-            
-        }
-
-        if (isWallSlide)
-        {
-            remainingJumps = 1;
-        }
-
-        if (Input.GetButtonDown("Jump"))
-        {
-            if (isWallSlide || remainingJumps > 0)
-            {
-                if (!isWallSlide)
-                {
-                    remainingJumps--;
-                }
-
-                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-                jumpSoundEffect.Play();
-
+                remainingJumps = 1;
             }
 
+            if (Input.GetButtonDown("Jump"))
+            {
+                if (isGrounded || remainingJumps > 0)
+                {
+                    if (!isGrounded)
+                    {
+                        remainingJumps--;
+                    }
+                    rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                    jumpSoundEffect.Play();
+                }
+            }
 
+            if (isWallSlide)
+            {
+                remainingJumps = 1;
+            }
+
+            if (Input.GetButtonDown("Jump"))
+            {
+                if (isWallSlide || remainingJumps > 0)
+                {
+                    if (!isWallSlide)
+                    {
+                        remainingJumps--;
+                    }
+                    rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                    jumpSoundEffect.Play();
+                }
+            }
+
+            if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Interactable?.Interact(this);
+            }
+
+            wallSlide();
+            wallJump();
+
+            if (isWallJumping)
+            {
+                Jump();
+            }
+
+            UpdateAnimationState();
         }
-
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Interactable?.Interact(this);
-        }
-
-        wallSlide();
-        wallJump();
-
-        if (isWallJumping)
-        {
-            Jump();
-        }
-
-        UpdateAnimationState();
     }
 
     private void FixedUpdate()
@@ -183,7 +175,6 @@ public class PlayerMovement : MonoBehaviour
                 localScale.x *= -1f;
                 transform.localScale = localScale;
             }
-
             Invoke(nameof(StopWallJumping), wallJumpingDuration);
         }
     }
