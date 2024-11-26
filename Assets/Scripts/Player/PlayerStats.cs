@@ -5,14 +5,14 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour
 {
 
-    [SerializeField] int startingHealth = 100;
-    [SerializeField] int startingMana = 100;
-    [SerializeField] float timeSinceLastHit = 2f;
+    [SerializeField] int startingHealth = 100;      //This is base Health Points
+    [SerializeField] int startingMana = 100;        //This is base mana
+    [SerializeField] float timeSinceLastHit = 2f;   //This is base regen timer
     
-    private float timer = 0f;
-    private PlayerMovement player;
-    private int currentHealth;
-    private int currentMana;
+    private float timer = 0f;       //Timer used to see in-game time
+    private PlayerMovement player;  //Player name
+    private int currentHealth;      //Grabs Current Health Points
+    private int currentMana;        //Grabs Current Mana 
     
     // Start is called before the first frame update
     void Start()
